@@ -66,7 +66,7 @@ public class AdminActions
             AnsiConsole.WriteLine("Press any key to exit...");
             Console.ReadLine();
         }
-        catch (Exception ex) 
+        catch (Exception ex)
         {
             Console.Clear();
             Console.WriteLine(ex.Message);
@@ -76,9 +76,44 @@ public class AdminActions
             return;
         }
     }
-    public async Task CheckApartmentsForStatus()
+    public async Task OrderedApartments()
     {
-        apartmentService.
+        var apartments = await apartmentService.OrderedApartments();
+        foreach (var apartment in apartments)
+        {
+            var table = new Table();
+
+            table.AddColumn("[yellow]Apartment[/]");
+
+            table.AddRow($"[green]Apartment ID[/]: {apartment.Id}");
+            table.AddRow($"[green]Type[/]: {apartment.ApartmentType}");
+            table.AddRow($"[green]Price[/]: {apartment.Price}");
+            table.AddRow($"[green]Ordered CustomerID[/]: {apartment.OrderedCustomerId}");
+            table.AddRow($"[green]Count of rooms[/]: {apartment.CountOfRooms}");
+
+            AnsiConsole.Write(table);
+        }
+        AnsiConsole.WriteLine("Press any key to exit...");
+        Console.ReadLine();
+    }
+    public async Task UnrderedApartments()
+    {
+        var apartments = await apartmentService.NotOrderedApartments();
+        foreach (var apartment in apartments)
+        {
+            var table = new Table();
+
+            table.AddColumn("[yellow]Apartment[/]");
+
+            table.AddRow($"[green]Apartment ID[/]: {apartment.Id}");
+            table.AddRow($"[green]Type[/]: {apartment.ApartmentType}");
+            table.AddRow($"[green]Price[/]: {apartment.Price}");
+            table.AddRow($"[green]Count of rooms[/]: {apartment.CountOfRooms}");
+
+            AnsiConsole.Write(table);
+        }
+        AnsiConsole.WriteLine("Press any key to exit...");
+        Console.ReadLine();
     }
     public async Task HotelBalance()
     {
@@ -86,6 +121,35 @@ public class AdminActions
     }
     public async Task UpdateAdminPassword()
     {
+        var adminmodel = new Admin();
+    reenterpassword:
+        var password = AnsiConsole.Prompt(
+            new TextPrompt<string>("Enter your [green]password[/]:")
+                .PromptStyle("yellow")
+        .Secret());
+        while (password.Length < 8)
+        {
+            AnsiConsole.WriteLine("Password's length must be at least 8 characters");
+            goto reenterpassword;
+        }
+        try
+        {
+            adminmodel.Password = password;
+            admin = await adminService.UpdatePassword(adminmodel);
+            AnsiConsole.MarkupLine("[green]Password Changed[/] Press enter to exit...");
+            Console.ReadLine();
+            AnsiConsole.Clear();
+            return;
+        }
+        catch (Exception ex) 
+        {
+            Console.Clear();
+            Console.WriteLine(ex.Message);
+            AnsiConsole.WriteLine("Press any key to exit...");
+            Console.ReadLine();
+            AnsiConsole.Clear();
+            return;
+        }
         
     }
 }

@@ -10,6 +10,8 @@ public class Apartment : Auditable
     public double Price { get; set; }
     [JsonProperty("count_of_rooms")]
     public int CountOfRooms { get; set; }
-    [JsonProperty("RoomType")]
+    [JsonProperty("room_type")]
     public ApartmentType ApartmentType { get; set; }
+    [JsonProperty("ordered_customer_id")]
+    public int OrderedCustomerId { get; set; }
 }

@@ -20,22 +20,18 @@ public class AdminService : IAdminService
     {
         return await apartmentService.Create(newApartment);
     }
-
     public async ValueTask<List<Apartment>> GetAllApartments()
     {
         return await apartmentService.GetAll();
     }
-
     public async ValueTask<List<Customer>> GetAllCustomers()
     {
         return await customerService.GetAll();
     }
-
     public async ValueTask<Apartment> GetApartmentById(int id)
     {
         return await apartmentService.Get(id);
     }
-
     public async ValueTask<Admin> LoginAsAdmin(string password)
     {
         administration = await FileIO.ReadAsync<Admin>(Constants.ADMINISTRATIONINFO);
@@ -44,7 +40,6 @@ public class AdminService : IAdminService
             ?? throw new Exception("Password is not match.");
         return admin;
     }
-
     public async ValueTask<Admin> UpdatePassword(Admin newAdmin)
     {
         administration = await FileIO.ReadAsync<Admin>(Constants.ADMINISTRATIONINFO);
@@ -52,6 +47,8 @@ public class AdminService : IAdminService
         var admin = administration.FirstOrDefault()
             ?? throw new Exception("administration info corrupted.");
         admin.Password = newAdmin.Password;
+
+        await FileIO.WriteAsync(Constants.ADMINISTRATIONINFO, administration);
         return admin;
     }
 }

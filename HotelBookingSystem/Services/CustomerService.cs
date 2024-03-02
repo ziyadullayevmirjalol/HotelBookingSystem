@@ -25,19 +25,30 @@ public class CustomerService : ICustomerService
         var existAparment = await apartmentService.Get(apartmentId)
             ?? throw new Exception($"Apartment is not exists with Id: {apartmentId}");
 
-        if (existAparment.Price <= existCustomer.Balance)
+        if (existAparment.OrderedCustomerId == 0)
         {
-            existCustomer.Balance -= existAparment.Price;
-            existCustomer.ApartmentId = apartmentId;
+            if (existAparment.Price <= existCustomer.Balance)
+            {
+                existCustomer.Balance -= existAparment.Price;
+                existCustomer.ApartmentId = apartmentId;
+                await apartmentService.SetOrdered(existAparment.Id, existCustomer.Id);
+            }
+            else
+            {
+                throw new Exception("Customer's balance is not enough to book this apartment");
+            }
+        }
+        else if (existAparment.OrderedCustomerId == customerId)
+        {
+            throw new Exception("You are already booked this apartment");
         }
         else
         {
-            throw new Exception("Customer's balance is not enough to book this apartment");
+            throw new Exception("Someone Already booked this apartment");
         }
 
         await FileIO.WriteAsync(Constants.CUSTOMERSPATH, customers);
         return existCustomer;
-
     }
     public async ValueTask<CustomerViewModel> Create(CustomerCreateModel customer)
     {
@@ -74,9 +85,16 @@ public class CustomerService : ICustomerService
         var existAparment = await apartmentService.Get(apartmentId)
             ?? throw new Exception($"Apartment is not exists with Id: {apartmentId}");
 
-        existCustomer.ApartmentId = 0;
-
-        await FileIO.WriteAsync(Constants.CUSTOMERSPATH, customers);
+        try
+        {
+            existCustomer.ApartmentId = 0;
+            await apartmentService.SetUnordered(apartmentId, customerId);
+            await FileIO.WriteAsync(Constants.CUSTOMERSPATH, customers);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
         return existCustomer;
     }
     public async ValueTask<Customer> GetCustomer(int customerId)

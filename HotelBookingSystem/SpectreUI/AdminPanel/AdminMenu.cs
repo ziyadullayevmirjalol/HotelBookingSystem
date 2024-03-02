@@ -29,7 +29,8 @@ public class AdminMenu
                     .PageSize(4)
                     .AddChoices(new[] {
                         "Add new apartment to the Hotel",
-                        "Check Apartments status",
+                        "View Ordered Apartments",
+                        "View Unrdered Apartments",
                         "View summary balance of Hotel",
                         "Update admin password\n",
                         "[red]Sign out[/]"}));
@@ -40,9 +41,13 @@ public class AdminMenu
                     AnsiConsole.Clear();
                     await adminActions.AddNewApartment();
                     break;
-                case "Check Apartments status":
+                case "View Ordered Apartments":
                     AnsiConsole.Clear();
-                    await adminActions.CheckApartmentsForStatus();
+                    await adminActions.OrderedApartments();
+                    break;
+                case "View Unrdered Apartments":
+                    AnsiConsole.Clear();
+                    await adminActions.UnrderedApartments();
                     break;
                 case "View summary balance of Hotel":
                     AnsiConsole.Clear();
@@ -51,7 +56,7 @@ public class AdminMenu
                 case "Update admin password\n":
                     AnsiConsole.Clear();
                     await adminActions.UpdateAdminPassword();
-                    break;
+                    return;
                 case "[red]Sign out[/]":
                     return;
             }

@@ -138,20 +138,38 @@ public class CustomerActions
     {
         var mapped = Customer.MapTo<CustomerViewModel>();
         var table = new Table();
+        if (mapped.ApartmentId != 0)
+        {
+            table.AddColumn("[yellow]Your Profile[/]");
 
-        table.AddColumn("[yellow]Your Profile[/]");
+            table.AddRow($"[green]Cusomer ID[/]: {mapped.Id}");
+            table.AddRow($"[green]Username[/]: {mapped.Username}");
+            table.AddRow($"[green]Email[/]: {mapped.Email}");
+            table.AddRow($"[green]Balance ($)[/]: {mapped.Balance}");
+            table.AddRow($"[green]Firstname[/]: {mapped.Firstname}");
+            table.AddRow($"[green]Lastname[/]: {mapped.Lastname}");
+            table.AddRow($"[green]Booked Apartment ID[/]: {mapped.ApartmentId}");
 
-        table.AddRow($"[green]Cusomer ID[/]: {mapped.Id}");
-        table.AddRow($"[green]Username[/]: {mapped.Username}");
-        table.AddRow($"[green]Email[/]: {mapped.Email}");
-        table.AddRow($"[green]Balance ($)[/]: {mapped.Balance}");
-        table.AddRow($"[green]Firstname[/]: {mapped.Firstname}");
-        table.AddRow($"[green]Lastname[/]: {mapped.Lastname}");
-        table.AddRow($"[green]Booked Apartment ID[/]: {mapped.ApartmentId}");
+            AnsiConsole.Write(table);
+            AnsiConsole.WriteLine("Press any key to exit...");
+            Console.ReadLine();
+        }
+        else
+        {
+            table.AddColumn("[yellow]Your Profile[/]");
 
-        AnsiConsole.Write(table);
-        AnsiConsole.WriteLine("Press any key to exit...");
-        Console.ReadLine();
+            table.AddRow($"[green]Cusomer ID[/]: {mapped.Id}");
+            table.AddRow($"[green]Username[/]: {mapped.Username}");
+            table.AddRow($"[green]Email[/]: {mapped.Email}");
+            table.AddRow($"[green]Balance ($)[/]: {mapped.Balance}");
+            table.AddRow($"[green]Firstname[/]: {mapped.Firstname}");
+            table.AddRow($"[green]Lastname[/]: {mapped.Lastname}");
+            table.AddRow($"[green]Booked Apartment ID[/]: {"Not ordered yet"}");
+
+            AnsiConsole.Write(table);
+            AnsiConsole.WriteLine("Press any key to exit...");
+            Console.ReadLine();
+        }
     }
     #endregion
 

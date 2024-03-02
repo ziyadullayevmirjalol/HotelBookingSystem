@@ -2,7 +2,8 @@
   {
     "price": 50000.0,
     "count_of_rooms": 3,
-    "RoomType": 0,
+    "room_type": 0,
+    "ordered_customer_id": 9,
     "id": 1,
     "created_at": "2024-03-02T08:38:38.0190409Z",
     "updated_at": "0001-01-01T00:00:00",
@@ -12,7 +13,8 @@
   {
     "price": 30000.0,
     "count_of_rooms": 1,
-    "RoomType": 2,
+    "room_type": 0,
+    "ordered_customer_id": 9,
     "id": 2,
     "created_at": "2024-03-02T08:40:53.3114123Z",
     "updated_at": "0001-01-01T00:00:00",
@@ -22,9 +24,21 @@
   {
     "price": 1123.0,
     "count_of_rooms": 12,
-    "RoomType": 0,
+    "room_type": 0,
+    "ordered_customer_id": 9,
     "id": 3,
     "created_at": "2024-03-02T08:45:13.2739537Z",
+    "updated_at": "0001-01-01T00:00:00",
+    "deleted_at": "0001-01-01T00:00:00",
+    "is_deleted": false
+  },
+  {
+    "price": 500.0,
+    "count_of_rooms": 4,
+    "room_type": 2,
+    "ordered_customer_id": 9,
+    "id": 4,
+    "created_at": "2024-03-02T13:39:00.9815081Z",
     "updated_at": "0001-01-01T00:00:00",
     "deleted_at": "0001-01-01T00:00:00",
     "is_deleted": false
