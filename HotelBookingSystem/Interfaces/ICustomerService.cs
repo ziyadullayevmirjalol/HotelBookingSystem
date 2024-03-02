@@ -11,6 +11,7 @@ public interface ICustomerService
     public ValueTask<Customer> GetCustomer(int customerId);
     public ValueTask<Customer> GetToLogin(string username, string password);
     public ValueTask<List<Customer>> GetAll();
-    public ValueTask<bool> BookApartment(int apartmentId, int customerId);
-    public ValueTask<bool> DeleteBookingApartment(int apartmentId, int customerId);
+    public ValueTask<Customer> BookApartment(int apartmentId, int customerId);
+    public ValueTask<Customer> DeleteBookingApartment(int apartmentId, int customerId);
+    public ValueTask<Customer> Deposit(int customerId, double amount);
 }

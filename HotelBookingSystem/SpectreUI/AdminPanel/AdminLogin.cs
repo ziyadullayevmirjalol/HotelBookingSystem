@@ -26,12 +26,18 @@ public class AdminLogin
             {
                 var getAdmin = await adminService.LoginAsAdmin(password);
 
-                adminMenu = new AdminMenu(getAdmin);
+                adminMenu = new AdminMenu(getAdmin, adminService);
                 await adminMenu.Menu();
+                return;
             }
             catch (Exception ex)
             {
+                Console.Clear();
                 Console.WriteLine(ex.Message);
+                AnsiConsole.WriteLine("Press any key to exit and try again.");
+                Console.ReadLine();
+                AnsiConsole.Clear();
+                return;
             }
         }
     }

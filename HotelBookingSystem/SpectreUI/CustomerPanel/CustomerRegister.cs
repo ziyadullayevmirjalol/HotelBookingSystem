@@ -45,11 +45,25 @@ public class CustomerRegister
             customerCreateModel.Firstname = firstname;
             customerCreateModel.Lastname = lastname;
 
-            var createdCustomer = await customerService.Create(customerCreateModel);
-            var getCustomer = await customerService.GetToLogin(username, password);
+            try
+            {
+                var createdCustomer = await customerService.Create(customerCreateModel);
+                var getCustomer = await customerService.GetToLogin(username, password);
 
-            customerMenu = new CustomerMenu(getCustomer);
-            await customerMenu.Menu();
+                customerMenu = new CustomerMenu(getCustomer, customerService);
+                await customerMenu.Menu();
+                return;
+            }
+            catch (Exception ex)
+            {
+                Console.Clear();
+                Console.WriteLine(ex.Message);
+                AnsiConsole.WriteLine("Press any key to exit and try again.");
+                Console.ReadLine();
+                AnsiConsole.Clear();
+                return;
+            }
+
         }
     }
 }

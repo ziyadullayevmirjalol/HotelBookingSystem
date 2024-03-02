@@ -18,8 +18,8 @@ public class MainMenu
 
     public MainMenu()
     {
-        customerService = new CustomerService(apartmentService);
         apartmentService = new ApartmentService();
+        customerService = new CustomerService(apartmentService);
         adminService = new AdminService(apartmentService, customerService);
 
         adminLogin = new AdminLogin(adminService);

@@ -28,12 +28,18 @@ public class CustomerLogin
             {
                 var getCustomer = await customerService.GetToLogin(username, password);
 
-                customerMenu = new CustomerMenu(getCustomer);
+                customerMenu = new CustomerMenu(getCustomer, customerService);
                 await customerMenu.Menu();
+                return;
             }
             catch (Exception ex)
             {
+                Console.Clear();
                 Console.WriteLine(ex.Message);
+                AnsiConsole.WriteLine("Press any key to exit and try again.");
+                Console.ReadLine();
+                AnsiConsole.Clear();
+                return;
             }
         }
     }

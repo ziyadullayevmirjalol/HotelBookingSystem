@@ -12,9 +12,4 @@
     <PackageReference Include="Spectre.Console" Version="0.48.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="SpectreUI\AdminPanel\Actions\" />
-    <Folder Include="SpectreUI\CustomerPanel\Actions\" />
-  </ItemGroup>
-
 </Project>

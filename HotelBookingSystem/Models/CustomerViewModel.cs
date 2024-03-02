@@ -8,6 +8,8 @@ public class CustomerViewModel
     public int Id { get; set; }
     [JsonProperty("username")]
     public string Username { get; set; }
+    [JsonProperty("balance")]
+    public double Balance { get; set; }
     [JsonProperty("email")]
     public string Email { get; set; }
     [JsonProperty("firstname")]
