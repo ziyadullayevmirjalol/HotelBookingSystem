@@ -32,7 +32,7 @@ public class CustomerService : ICustomerService
         }
         else
         {
-            throw new Exception("$Customer's balance is not enough to book this apartment");
+            throw new Exception("Customer's balance is not enough to book this apartment");
         }
 
         await FileIO.WriteAsync(Constants.CUSTOMERSPATH, customers);

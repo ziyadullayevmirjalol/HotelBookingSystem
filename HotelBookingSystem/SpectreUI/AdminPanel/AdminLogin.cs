@@ -6,11 +6,13 @@ namespace HotelBookingSystem.SpectreUI.AdminPanel;
 public class AdminLogin
 {
     private AdminService adminService;
+    private ApartmentService apartmentService;
     private AdminMenu adminMenu;
 
-    public AdminLogin(AdminService adminService)
+    public AdminLogin(AdminService adminService, ApartmentService apartmentService)
     {
         this.adminService = adminService;
+        this.apartmentService = apartmentService;
     }
     public async Task Login()
     {
@@ -26,7 +28,7 @@ public class AdminLogin
             {
                 var getAdmin = await adminService.LoginAsAdmin(password);
 
-                adminMenu = new AdminMenu(getAdmin, adminService);
+                adminMenu = new AdminMenu(getAdmin, adminService, apartmentService);
                 await adminMenu.Menu();
                 return;
             }

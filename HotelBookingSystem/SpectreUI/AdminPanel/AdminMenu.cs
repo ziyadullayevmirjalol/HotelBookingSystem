@@ -10,11 +10,13 @@ public class AdminMenu
     private Admin admin;
     private AdminActions adminActions;
     private AdminService adminService;
-    public AdminMenu(Admin admin, AdminService adminService)
+    private ApartmentService apartmentService;
+    public AdminMenu(Admin admin, AdminService adminService, ApartmentService apartmentService)
     {
         this.admin = admin;
         this.adminService = adminService;
-        adminActions = new AdminActions(admin, adminService);
+        this.apartmentService = apartmentService;
+        adminActions = new AdminActions(admin, adminService, apartmentService);
     }
     public async Task Menu()
     {

@@ -22,7 +22,7 @@ public class MainMenu
         customerService = new CustomerService(apartmentService);
         adminService = new AdminService(apartmentService, customerService);
 
-        adminLogin = new AdminLogin(adminService);
+        adminLogin = new AdminLogin(adminService, apartmentService);
         customerLogin = new CustomerLogin(customerService);
         customerRegister = new CustomerRegister(customerService);
     }

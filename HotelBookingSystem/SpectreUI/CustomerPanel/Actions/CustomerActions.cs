@@ -15,6 +15,7 @@ public class CustomerActions
         this.Customer = customer;
         this.customerService = customerService;
     }
+
     #region Deposit
     public async Task Deposit()
     {
@@ -34,7 +35,6 @@ public class CustomerActions
          Thread.Sleep(1000);
          AnsiConsole.Clear();
      });
-
         AnsiConsole.MarkupLine("[green]Done[/] Press any key to continue...");
         Console.ReadLine();
     }
@@ -50,6 +50,7 @@ public class CustomerActions
          AnsiConsole.MarkupLine("loading services...");
          try
          {
+             AnsiConsole.Clear();
              Customer = await customerService.BookApartment(apartmentId, Customer.Id);
              AnsiConsole.MarkupLine("[green]You Booked a new apartment[/] Press any key to continue...");
              Console.ReadLine();
@@ -63,7 +64,6 @@ public class CustomerActions
              AnsiConsole.Clear();
              return;
          }
-         Thread.Sleep(2000);
          AnsiConsole.Clear();
      });
     }
