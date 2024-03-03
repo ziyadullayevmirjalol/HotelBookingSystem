@@ -37,7 +37,7 @@ public class AdminService : IAdminService
     {
         administration = await FileIO.ReadAsync<Admin>(Constants.ADMINISTRATIONINFO);
 
-        var admin = administration.FirstOrDefault(a => a.Password == password)
+        var admin = administration.FirstOrDefault(a => PasswordHashing.VerifyPassword(a.Password, password))
             ?? throw new Exception("Password is not match.");
         return admin;
     }
@@ -47,7 +47,8 @@ public class AdminService : IAdminService
 
         var admin = administration.FirstOrDefault()
             ?? throw new Exception("administration info corrupted.");
-        admin.Password = newAdmin.Password;
+
+        admin.Password = PasswordHashing.Hashing(newAdmin.Password);
 
         await FileIO.WriteAsync(Constants.ADMINISTRATIONINFO, administration);
         return admin;

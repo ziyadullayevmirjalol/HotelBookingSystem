@@ -1,4 +1,5 @@
-﻿using HotelBookingSystem.Models;
+﻿using HotelBookingSystem.Helpers;
+using HotelBookingSystem.Models;
 using HotelBookingSystem.Services;
 using Spectre.Console;
 using System.Text.RegularExpressions;
@@ -43,8 +44,10 @@ public class CustomerRegister
             string firstname = AnsiConsole.Ask<string>("Enter your [green]Firstname[/]");
             string lastname = AnsiConsole.Ask<string>("Enter your [green]Lastname[/]");
 
+            var HashedPassword = PasswordHashing.Hashing(password);
+
             customerCreateModel.Username = username;
-            customerCreateModel.Password = password;
+            customerCreateModel.Password = HashedPassword;
             customerCreateModel.Email = email;
             customerCreateModel.Firstname = firstname;
             customerCreateModel.Lastname = lastname;

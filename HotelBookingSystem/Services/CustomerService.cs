@@ -120,7 +120,7 @@ public class CustomerService : ICustomerService
     {
         customers = await FileIO.ReadAsync<Customer>(Constants.CUSTOMERSPATH);
 
-        var existCustomer = customers.FirstOrDefault(customer => customer.Username == username && customer.Password == password && !customer.IsDeleted)
+        var existCustomer = customers.FirstOrDefault(customer => customer.Username == username && PasswordHashing.VerifyPassword(customer.Password, password) && !customer.IsDeleted)
             ?? throw new Exception($"Customer is not exists with username or incorrect password: {username}");
         return existCustomer;
     }
@@ -137,7 +137,7 @@ public class CustomerService : ICustomerService
             throw new Exception("Someone is using this email already");
 
         existCustomer.Username = customer.Username;
-        existCustomer.Password = customer.Password;
+        existCustomer.Password = PasswordHashing.Hashing(customer.Password);
         existCustomer.Email = customer.Email;
         existCustomer.Firstname = customer.Firstname;
         existCustomer.Lastname = customer.Lastname;
