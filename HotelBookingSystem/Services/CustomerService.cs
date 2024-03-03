@@ -66,7 +66,7 @@ public class CustomerService : ICustomerService
         customers = await FileIO.ReadAsync<Customer>(Constants.CUSTOMERSPATH);
 
         if (customers.Any(c => (c.Username == customer.Username || c.Email == customer.Email) && !c.IsDeleted))
-            throw new Exception($"Customer is already exists with username: {customer.Username}.");
+            throw new Exception($"Customer is already exists with username: ({customer.Username}) or email ({customer.Email})");
 
         var createdCustomer = customers.Create(customer.MapTo<Customer>());
 
