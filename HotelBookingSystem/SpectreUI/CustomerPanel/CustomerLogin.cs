@@ -1,5 +1,4 @@
-﻿using HotelBookingSystem.Helpers;
-using HotelBookingSystem.Services;
+﻿using HotelBookingSystem.Services;
 using Spectre.Console;
 
 namespace HotelBookingSystem.SpectreUI.CustomerPanel;

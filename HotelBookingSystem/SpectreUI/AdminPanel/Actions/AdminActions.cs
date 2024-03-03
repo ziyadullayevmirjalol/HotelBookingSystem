@@ -203,6 +203,153 @@ public class AdminActions
     }
     #endregion
 
+    #region Get All Econo Class Apartments
+    public async Task GetAllEconoApartmentsAsync()
+    {
+        var apartments = await apartmentService.GetAllPremiumAsync();
+        if (apartments.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[yellow]The hotel does not yet have apartments.[/]\nPress any key to exit...");
+            Console.ReadLine();
+        }
+        else
+        {
+            foreach (var apartment in apartments)
+            {
+                if (apartment.OrderedCustomerId == 0)
+                {
+                    var table = new Table();
+
+                    table.AddColumn("[yellow]Apartment[/]");
+
+                    table.AddRow($"[green]Apartment ID[/]: {apartment.Id}");
+                    table.AddRow($"[green]Type[/]: {apartment.ApartmentType}");
+                    table.AddRow($"[green]Price[/]: {apartment.Price}");
+                    table.AddRow($"[green]Ordered CustomerID[/]: {"Not Booked Yet"}");
+                    table.AddRow($"[green]Count of rooms[/]: {apartment.CountOfRooms}");
+
+                    AnsiConsole.Write(table);
+                }
+                else
+                {
+                    var table = new Table();
+
+                    table.AddColumn("[yellow]Apartment[/]");
+
+                    table.AddRow($"[green]Apartment ID[/]: {apartment.Id}");
+                    table.AddRow($"[green]Type[/]: {apartment.ApartmentType}");
+                    table.AddRow($"[green]Price[/]: {apartment.Price}");
+                    table.AddRow($"[green]Ordered CustomerID[/]: {apartment.OrderedCustomerId}");
+                    table.AddRow($"[green]Count of rooms[/]: {apartment.CountOfRooms}");
+
+                    AnsiConsole.Write(table);
+                }
+
+            }
+            AnsiConsole.WriteLine("Press any key to exit...");
+            Console.ReadLine();
+        }
+    }
+    #endregion
+
+    #region Get All Normal Class Apartment
+    public async Task GetAllNormalApartmentsAsync()
+    {
+        var apartments = await apartmentService.GetAllNormalAsync();
+        if (apartments.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[yellow]The hotel does not yet have apartments.[/]\nPress any key to exit...");
+            Console.ReadLine();
+        }
+        else
+        {
+            foreach (var apartment in apartments)
+            {
+
+                if (apartment.OrderedCustomerId == 0)
+                {
+                    var table = new Table();
+
+                    table.AddColumn("[yellow]Apartment[/]");
+
+                    table.AddRow($"[green]Apartment ID[/]: {apartment.Id}");
+                    table.AddRow($"[green]Type[/]: {apartment.ApartmentType}");
+                    table.AddRow($"[green]Price[/]: {apartment.Price}");
+                    table.AddRow($"[green]Ordered CustomerID[/]: {"Not Booked Yet"}");
+                    table.AddRow($"[green]Count of rooms[/]: {apartment.CountOfRooms}");
+
+                    AnsiConsole.Write(table);
+                }
+                else
+                {
+                    var table = new Table();
+
+                    table.AddColumn("[yellow]Apartment[/]");
+
+                    table.AddRow($"[green]Apartment ID[/]: {apartment.Id}");
+                    table.AddRow($"[green]Type[/]: {apartment.ApartmentType}");
+                    table.AddRow($"[green]Price[/]: {apartment.Price}");
+                    table.AddRow($"[green]Ordered CustomerID[/]: {apartment.OrderedCustomerId}");
+                    table.AddRow($"[green]Count of rooms[/]: {apartment.CountOfRooms}");
+
+                    AnsiConsole.Write(table);
+                }
+            }
+            AnsiConsole.WriteLine("Press any key to exit...");
+            Console.ReadLine();
+        }
+    }
+    #endregion
+
+    #region Get All Premium Class Apartments
+    public async Task GetAllPremiumApartmentsAsync()
+    {
+        var apartments = await apartmentService.GetAllPremiumAsync();
+        if (apartments.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[yellow]The hotel does not yet have apartments.[/]\nPress any key to exit...");
+            Console.ReadLine();
+        }
+        else
+        {
+            foreach (var apartment in apartments)
+            {
+
+                if (apartment.OrderedCustomerId == 0)
+                {
+                    var table = new Table();
+
+                    table.AddColumn("[yellow]Apartment[/]");
+
+                    table.AddRow($"[green]Apartment ID[/]: {apartment.Id}");
+                    table.AddRow($"[green]Type[/]: {apartment.ApartmentType}");
+                    table.AddRow($"[green]Price[/]: {apartment.Price}");
+                    table.AddRow($"[green]Ordered CustomerID[/]: {"Not Booked Yet"}");
+                    table.AddRow($"[green]Count of rooms[/]: {apartment.CountOfRooms}");
+
+                    AnsiConsole.Write(table);
+                }
+                else
+                {
+                    var table = new Table();
+
+                    table.AddColumn("[yellow]Apartment[/]");
+
+                    table.AddRow($"[green]Apartment ID[/]: {apartment.Id}");
+                    table.AddRow($"[green]Type[/]: {apartment.ApartmentType}");
+                    table.AddRow($"[green]Price[/]: {apartment.Price}");
+                    table.AddRow($"[green]Ordered CustomerID[/]: {apartment.OrderedCustomerId}");
+                    table.AddRow($"[green]Count of rooms[/]: {apartment.CountOfRooms}");
+
+                    AnsiConsole.Write(table);
+                }
+            }
+            AnsiConsole.WriteLine("Press any key to exit...");
+            Console.ReadLine();
+        }
+    }
+    #endregion
+
     #region Booked Apartments
     public async Task BookedApartmentsAsync()
     {

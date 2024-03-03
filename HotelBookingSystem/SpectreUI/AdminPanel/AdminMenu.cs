@@ -37,6 +37,9 @@ public class AdminMenu
                         "Get All Customers",
                         "View Booked Apartments",
                         "View not Booked Apartments",
+                        "View All Econo class Apartments",
+                        "View All Normal class Apartments",
+                        "View All Premium class Apartments",
                         "View summary balance of Hotel",
                         "Update admin password\n",
                         "[red]Sign out[/]"}));
@@ -70,6 +73,18 @@ public class AdminMenu
                 case "View not Booked Apartments":
                     AnsiConsole.Clear();
                     await adminActions.NotBookedApartmentsAsync();
+                    break;
+                case "View All Econo class Apartments":
+                    AnsiConsole.Clear();
+                    await adminActions.GetAllEconoApartmentsAsync();
+                    break;
+                case "View All Normal class Apartments":
+                    AnsiConsole.Clear();
+                    await adminActions.GetAllNormalApartmentsAsync();
+                    break;
+                case "View All Premium class Apartments":
+                    AnsiConsole.Clear();
+                    await adminActions.GetAllPremiumApartmentsAsync();
                     break;
                 case "View summary balance of Hotel":
                     AnsiConsole.Clear();

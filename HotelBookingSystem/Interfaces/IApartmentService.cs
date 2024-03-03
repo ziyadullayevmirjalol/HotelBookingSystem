@@ -12,4 +12,8 @@ internal interface IApartmentService
     public ValueTask<bool> SetUnorderedAsync(int apartmentId, int customerId);
     public ValueTask<List<Apartment>> BookedApartmentsAsync();
     public ValueTask<List<Apartment>> NotBookedApartmentsAsync();
+    public ValueTask<List<Apartment>> GetAllPremiumAsync();
+    public ValueTask<List<Apartment>> GetAllNormalAsync();
+    public ValueTask<List<Apartment>> GetAllPreminumAsync();
+
 }

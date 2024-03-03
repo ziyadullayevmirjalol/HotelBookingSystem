@@ -33,6 +33,9 @@ public class CustomerMenu
                         "Deposit",
                         "View Booked Apartments",
                         "View not Booked Apartments",
+                        "View All Econo class Apartments",
+                        "View All Normal class Apartments",
+                        "View All Premium class Apartments",
                         "Book new apartment",
                         "Remove already booked apartment",
                         "View Profile",
@@ -50,9 +53,17 @@ public class CustomerMenu
                     AnsiConsole.Clear();
                     await customerActions.BookedApartmentsAsync();
                     break;
-                case "View not Booked Apartments":
+                case "View All Econo class Apartments":
                     AnsiConsole.Clear();
-                    await customerActions.NotBookedApartmentsAsync();
+                    await customerActions.GetAllEconoApartmentsAsync();
+                    break;
+                case "View All Normal class Apartments":
+                    AnsiConsole.Clear();
+                    await customerActions.GetAllNormalApartmentsAsync();
+                    break;
+                case "View All Premium class Apartments":
+                    AnsiConsole.Clear();
+                    await customerActions.GetAllPremiumApartmentsAsync();
                     break;
                 case "Book new apartment":
                     AnsiConsole.Clear();

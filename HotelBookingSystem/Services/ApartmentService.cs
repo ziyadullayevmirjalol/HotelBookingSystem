@@ -81,4 +81,22 @@ public class ApartmentService : IApartmentService
 
         return apartments.Where(a => a.OrderedCustomerId == 0).ToList();
     }
+    public async ValueTask<List<Apartment>> GetAllPremiumAsync()
+    {
+        apartments = await FileIO.ReadAsync<Apartment>(Constants.APARTMENTSPATH);
+
+        return apartments.Where(a => a.ApartmentType == Enums.ApartmentType.Econo).ToList();
+    }
+    public async ValueTask<List<Apartment>> GetAllNormalAsync()
+    {
+        apartments = await FileIO.ReadAsync<Apartment>(Constants.APARTMENTSPATH);
+
+        return apartments.Where(a => a.ApartmentType == Enums.ApartmentType.Normal).ToList();
+    }
+    public async ValueTask<List<Apartment>> GetAllPreminumAsync()
+    {
+        apartments = await FileIO.ReadAsync<Apartment>(Constants.APARTMENTSPATH);
+
+        return apartments.Where(a => a.ApartmentType == Enums.ApartmentType.Premium).ToList();
+    }
 }
