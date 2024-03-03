@@ -196,8 +196,6 @@ public class AdminActions
                 table.AddRow($"[green]Booked Apartment ID[/]: {customer.ApartmentId}");
 
                 AnsiConsole.Write(table);
-                AnsiConsole.WriteLine("Press any key to exit...");
-                Console.ReadLine();
             }
             AnsiConsole.WriteLine("Press any key to exit...");
             Console.ReadLine();
