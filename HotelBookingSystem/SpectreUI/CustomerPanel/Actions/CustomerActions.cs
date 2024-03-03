@@ -10,14 +10,16 @@ public class CustomerActions
 {
     private Customer Customer;
     private CustomerService customerService;
-    public CustomerActions(Customer customer, CustomerService customerService)
+    private ApartmentService apartmentService;
+    public CustomerActions(Customer customer, CustomerService customerService, ApartmentService apartmentService)
     {
         this.Customer = customer;
         this.customerService = customerService;
+        this.apartmentService = apartmentService;
     }
 
     #region Deposit
-    public async Task Deposit()
+    public async Task DepositAsync()
     {
         var amount = AnsiConsole.Ask<double>("Enter [green]amount[/]: ");
         await AnsiConsole.Status()
@@ -26,7 +28,7 @@ public class CustomerActions
          AnsiConsole.MarkupLine("loading services...");
          try
          {
-             Customer = await customerService.Deposit(Customer.Id, amount);
+             Customer = await customerService.DepositAsync(Customer.Id, amount);
          }
          catch (Exception ex)
          {
@@ -40,8 +42,68 @@ public class CustomerActions
     }
     #endregion
 
+    #region View Booked Apartments
+    public async Task BookedApartmentsAsync()
+    {
+        var apartments = await apartmentService.BookedApartmentsAsync();
+        if (apartments.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[yellow]The hotel does not yet have apartments.[/]\nPress any key to exit...");
+            Console.ReadLine();
+        }
+        else
+        {
+            foreach (var apartment in apartments)
+            {
+                var table = new Table();
+
+                table.AddColumn("[yellow]Apartment[/]");
+
+                table.AddRow($"[green]Apartment ID[/]: {apartment.Id}");
+                table.AddRow($"[green]Type[/]: {apartment.ApartmentType}");
+                table.AddRow($"[green]Price[/]: {apartment.Price}");
+                table.AddRow($"[green]Count of rooms[/]: {apartment.CountOfRooms}");
+
+                AnsiConsole.Write(table);
+            }
+            AnsiConsole.WriteLine("Press any key to exit...");
+            Console.ReadLine();
+        }
+    }
+    #endregion
+
+    #region View Not Booked Apartments
+    public async Task NotBookedApartmentsAsync()
+    {
+        var apartments = await apartmentService.NotBookedApartmentsAsync();
+        if (apartments.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[yellow]The hotel does not yet have apartments.[/]\nPress any key to exit...");
+            Console.ReadLine();
+        }
+        else
+        {
+            foreach (var apartment in apartments)
+            {
+                var table = new Table();
+
+                table.AddColumn("[yellow]Apartment[/]");
+
+                table.AddRow($"[green]Apartment ID[/]: {apartment.Id}");
+                table.AddRow($"[green]Type[/]: {apartment.ApartmentType}");
+                table.AddRow($"[green]Price[/]: {apartment.Price}");
+                table.AddRow($"[green]Count of rooms[/]: {apartment.CountOfRooms}");
+
+                AnsiConsole.Write(table);
+            }
+            AnsiConsole.WriteLine("Press any key to exit...");
+            Console.ReadLine();
+        }
+    }
+    #endregion
+
     #region Book New Apartment
-    public async Task BookNewApartment()
+    public async Task BookNewApartmentAsync()
     {
         var apartmentId = AnsiConsole.Ask<int>("Enter [green]apartment ID[/]: ");
         await AnsiConsole.Status()
@@ -51,7 +113,7 @@ public class CustomerActions
          try
          {
              AnsiConsole.Clear();
-             Customer = await customerService.BookApartment(apartmentId, Customer.Id);
+             Customer = await customerService.BookApartmentAsync(apartmentId, Customer.Id);
              AnsiConsole.MarkupLine("[green]You Booked a new apartment[/] Press any key to continue...");
              Console.ReadLine();
          }
@@ -70,7 +132,7 @@ public class CustomerActions
     #endregion
 
     #region Remove Booked Apartment
-    public async Task RemoveBookedApartment()
+    public async Task RemoveBookedApartmentAsync()
     {
     reenter:
         var mapped = Customer.MapTo<CustomerViewModel>();
@@ -98,7 +160,7 @@ public class CustomerActions
                 case "yes":
                     try
                     {
-                        Customer = await customerService.DeleteBookingApartment(mapped.ApartmentId, mapped.Id);
+                        Customer = await customerService.DeleteBookingApartmentAsync(mapped.ApartmentId, mapped.Id);
                     }
                     catch (Exception ex)
                     {
@@ -134,21 +196,21 @@ public class CustomerActions
     #endregion
 
     #region View Profile
-    public async Task ViewProfile()
+    public async Task ViewProfileAsync()
     {
-        var mapped = Customer.MapTo<CustomerViewModel>();
+        var customerView = await customerService.ViewCustomerAsync(Customer.Id);
         var table = new Table();
-        if (mapped.ApartmentId != 0)
+        if (customerView.ApartmentId != 0)
         {
             table.AddColumn("[yellow]Your Profile[/]");
 
-            table.AddRow($"[green]Cusomer ID[/]: {mapped.Id}");
-            table.AddRow($"[green]Username[/]: {mapped.Username}");
-            table.AddRow($"[green]Email[/]: {mapped.Email}");
-            table.AddRow($"[green]Balance ($)[/]: {mapped.Balance}");
-            table.AddRow($"[green]Firstname[/]: {mapped.Firstname}");
-            table.AddRow($"[green]Lastname[/]: {mapped.Lastname}");
-            table.AddRow($"[green]Booked Apartment ID[/]: {mapped.ApartmentId}");
+            table.AddRow($"[green]Cusomer ID[/]: {customerView.Id}");
+            table.AddRow($"[green]Username[/]: {customerView.Username}");
+            table.AddRow($"[green]Email[/]: {customerView.Email}");
+            table.AddRow($"[green]Balance ($)[/]: {customerView.Balance}");
+            table.AddRow($"[green]Firstname[/]: {customerView.Firstname}");
+            table.AddRow($"[green]Lastname[/]: {customerView.Lastname}");
+            table.AddRow($"[green]Booked Apartment ID[/]: {customerView.ApartmentId}");
 
             AnsiConsole.Write(table);
             AnsiConsole.WriteLine("Press any key to exit...");
@@ -158,12 +220,12 @@ public class CustomerActions
         {
             table.AddColumn("[yellow]Your Profile[/]");
 
-            table.AddRow($"[green]Cusomer ID[/]: {mapped.Id}");
-            table.AddRow($"[green]Username[/]: {mapped.Username}");
-            table.AddRow($"[green]Email[/]: {mapped.Email}");
-            table.AddRow($"[green]Balance ($)[/]: {mapped.Balance}");
-            table.AddRow($"[green]Firstname[/]: {mapped.Firstname}");
-            table.AddRow($"[green]Lastname[/]: {mapped.Lastname}");
+            table.AddRow($"[green]Cusomer ID[/]: {customerView.Id}");
+            table.AddRow($"[green]Username[/]: {customerView.Username}");
+            table.AddRow($"[green]Email[/]: {customerView.Email}");
+            table.AddRow($"[green]Balance ($)[/]: {customerView.Balance}");
+            table.AddRow($"[green]Firstname[/]: {customerView.Firstname}");
+            table.AddRow($"[green]Lastname[/]: {customerView.Lastname}");
             table.AddRow($"[green]Booked Apartment ID[/]: {"Not ordered yet"}");
 
             AnsiConsole.Write(table);
@@ -174,7 +236,7 @@ public class CustomerActions
     #endregion
 
     #region Update Customer Details
-    public async Task UpdateCustomerDetails()
+    public async Task UpdateCustomerDetailsAsync()
     {
         CustomerUpdateModel customerUpdate = new CustomerUpdateModel();
 
@@ -205,8 +267,8 @@ public class CustomerActions
 
         try
         {
-            await customerService.Update(Customer.Id, customerUpdate);
-            Customer = await customerService.GetCustomer(Customer.Id);
+            await customerService.UpdateAsync(Customer.Id, customerUpdate);
+            Customer = await customerService.GetCustomerAsync(Customer.Id);
             AnsiConsole.MarkupLine("[green]Success[/] Press any key to continue...");
             Console.ReadLine();
         }
@@ -223,7 +285,7 @@ public class CustomerActions
     #endregion
 
     #region Delete Account
-    public async Task DeleteAccount()
+    public async Task DeleteAccountAsync()
     {
     reenter:
         AnsiConsole.WriteLine($"Are you sure you want to delete your account with username: {Customer.Username}?...");
@@ -235,7 +297,7 @@ public class CustomerActions
                 try
                 {
                     AnsiConsole.Clear();
-                    await customerService.Delete(Customer.Id);
+                    await customerService.DeleteAsync(Customer.Id);
                     AnsiConsole.MarkupLine("[green]Success[/]Press any key to exit...");
                     Console.ReadLine();
                     AnsiConsole.Clear();

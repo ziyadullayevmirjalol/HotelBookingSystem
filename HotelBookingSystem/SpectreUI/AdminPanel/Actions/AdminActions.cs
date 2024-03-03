@@ -6,9 +6,6 @@ namespace HotelBookingSystem.SpectreUI.AdminPanel.Actions;
 
 public class AdminActions
 {
-    private Admin admin;
-    private AdminService adminService;
-    private ApartmentService apartmentService;
     public AdminActions(Admin admin, AdminService adminService, ApartmentService apartmentService)
     {
         this.admin = admin;
@@ -16,12 +13,18 @@ public class AdminActions
         this.apartmentService = apartmentService;
 
     }
-    public async Task AddNewApartment()
+
+    private Admin admin;
+    private AdminService adminService;
+    private ApartmentService apartmentService;
+
+    #region Add new Apartment to the Hotel
+    public async Task AddNewApartmentAsync()
     {
         ApartmentCreateModel model = new ApartmentCreateModel();
         var price = AnsiConsole.Ask<double>("Enter [green]Price[/]:");
         var countOfRooms = AnsiConsole.Ask<int>("Enter [green]Count of rooms[/]:");
-        AnsiConsole.Markup("apartmet Type \n" +
+        AnsiConsole.Markup("Apartment Type \n" +
             "---------------\n" +
             "1. Econo\n" +
             "2. Normal\n" +
@@ -44,14 +47,13 @@ public class AdminActions
                 AnsiConsole.MarkupLine("[red]Invalid choose[/] press any key to try again...");
                 Console.ReadLine();
                 goto again;
-
         }
 
         model.CountOfRooms = countOfRooms;
         model.Price = price;
         try
         {
-            Apartment created = await apartmentService.Create(model);
+            Apartment created = await apartmentService.CreateAsync(model);
 
             var table = new Table();
 
@@ -76,11 +78,41 @@ public class AdminActions
             return;
         }
     }
-    public async Task OrderedApartments()
+    #endregion
+
+    #region Delete Apartment from the hotel
+    public async Task DeleteApartmentAsync()
     {
-        var apartments = await apartmentService.OrderedApartments();
-        foreach (var apartment in apartments)
+        var id = AnsiConsole.Ask<int>("Enter [green]ApartmentID[/]:");
+        try
         {
+            AnsiConsole.Clear();
+            await apartmentService.DeleteAsync(id);
+            AnsiConsole.MarkupLine("[green]Apartment Deleted[/] Press enter to exit...");
+            Console.ReadLine();
+            AnsiConsole.Clear();
+            return;
+        }
+        catch (Exception ex)
+        {
+            Console.Clear();
+            Console.WriteLine(ex.Message);
+            AnsiConsole.WriteLine("Press any key to exit...");
+            Console.ReadLine();
+            AnsiConsole.Clear();
+            return;
+        }
+    }
+    #endregion
+
+    #region Get Apartment by ID
+    public async Task GetApartmentByIdAsync()
+    {
+        var id = AnsiConsole.Ask<int>("Enter [green]ApartmentID[/]:");
+        try
+        {
+            AnsiConsole.Clear();
+            var apartment = await adminService.GetApartmentByIdAsync(id);
             var table = new Table();
 
             table.AddColumn("[yellow]Apartment[/]");
@@ -88,38 +120,174 @@ public class AdminActions
             table.AddRow($"[green]Apartment ID[/]: {apartment.Id}");
             table.AddRow($"[green]Type[/]: {apartment.ApartmentType}");
             table.AddRow($"[green]Price[/]: {apartment.Price}");
-            table.AddRow($"[green]Ordered CustomerID[/]: {apartment.OrderedCustomerId}");
             table.AddRow($"[green]Count of rooms[/]: {apartment.CountOfRooms}");
 
             AnsiConsole.Write(table);
+
+            AnsiConsole.MarkupLine("Press enter to exit...");
+            Console.ReadLine();
+            AnsiConsole.Clear();
+            return;
         }
-        AnsiConsole.WriteLine("Press any key to exit...");
-        Console.ReadLine();
-    }
-    public async Task UnrderedApartments()
-    {
-        var apartments = await apartmentService.NotOrderedApartments();
-        foreach (var apartment in apartments)
+        catch (Exception ex)
         {
-            var table = new Table();
-
-            table.AddColumn("[yellow]Apartment[/]");
-
-            table.AddRow($"[green]Apartment ID[/]: {apartment.Id}");
-            table.AddRow($"[green]Type[/]: {apartment.ApartmentType}");
-            table.AddRow($"[green]Price[/]: {apartment.Price}");
-            table.AddRow($"[green]Count of rooms[/]: {apartment.CountOfRooms}");
-
-            AnsiConsole.Write(table);
+            Console.Clear();
+            Console.WriteLine(ex.Message);
+            AnsiConsole.WriteLine("Press any enter to exit...");
+            Console.ReadLine();
+            AnsiConsole.Clear();
+            return;
         }
-        AnsiConsole.WriteLine("Press any key to exit...");
-        Console.ReadLine();
     }
-    public async Task HotelBalance()
-    {
+    #endregion
 
+    #region Get All Aparments
+    public async Task GetAllApartmentsAsync()
+    {
+        var apartments = await adminService.GetAllApartmentsAsync();
+        if (apartments.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[yellow]The hotel does not yet have apartments.[/]\nPress any key to exit...");
+            Console.ReadLine();
+        }
+        else
+        {
+            foreach (var apartment in apartments)
+            {
+                var table = new Table();
+
+                table.AddColumn("[yellow]Apartment[/]");
+
+                table.AddRow($"[green]Apartment ID[/]: {apartment.Id}");
+                table.AddRow($"[green]Type[/]: {apartment.ApartmentType}");
+                table.AddRow($"[green]Price[/]: {apartment.Price}");
+                table.AddRow($"[green]Ordered CustomerID[/]: {apartment.OrderedCustomerId}");
+                table.AddRow($"[green]Count of rooms[/]: {apartment.CountOfRooms}");
+
+                AnsiConsole.Write(table);
+            }
+            AnsiConsole.WriteLine("Press any key to exit...");
+            Console.ReadLine();
+        }
     }
-    public async Task UpdateAdminPassword()
+    #endregion
+
+    #region Get All Customers
+    public async Task GetAllCustomersAsync()
+    {
+        var customers = await adminService.GetAllCustomersAsync();
+        if (customers.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[yellow]The hotel does not yet have customers.[/]\nPress any key to exit...");
+            Console.ReadLine();
+        }
+        else
+        {
+            foreach (var customer in customers)
+            {
+                var table = new Table();
+                table.AddColumn("[yellow]Your Profile[/]");
+
+                table.AddRow($"[green]Cusomer ID[/]: {customer.Id}");
+                table.AddRow($"[green]Username[/]: {customer.Username}");
+                table.AddRow($"[green]Email[/]: {customer.Email}");
+                table.AddRow($"[green]Firstname[/]: {customer.Firstname}");
+                table.AddRow($"[green]Lastname[/]: {customer.Lastname}");
+                table.AddRow($"[green]Booked Apartment ID[/]: {customer.ApartmentId}");
+
+                AnsiConsole.Write(table);
+                AnsiConsole.WriteLine("Press any key to exit...");
+                Console.ReadLine();
+            }
+            AnsiConsole.WriteLine("Press any key to exit...");
+            Console.ReadLine();
+        }
+    }
+    #endregion
+
+    #region Booked Apartments
+    public async Task BookedApartmentsAsync()
+    {
+        var apartments = await apartmentService.BookedApartmentsAsync();
+        if (apartments.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[yellow]The hotel does not yet have apartments.[/]\nPress any key to exit...");
+            Console.ReadLine();
+        }
+        else
+        {
+            foreach (var apartment in apartments)
+            {
+                var table = new Table();
+
+                table.AddColumn("[yellow]Apartment[/]");
+
+                table.AddRow($"[green]Apartment ID[/]: {apartment.Id}");
+                table.AddRow($"[green]Type[/]: {apartment.ApartmentType}");
+                table.AddRow($"[green]Price[/]: {apartment.Price}");
+                table.AddRow($"[green]Ordered CustomerID[/]: {apartment.OrderedCustomerId}");
+                table.AddRow($"[green]Count of rooms[/]: {apartment.CountOfRooms}");
+
+                AnsiConsole.Write(table);
+            }
+            AnsiConsole.WriteLine("Press any key to exit...");
+            Console.ReadLine();
+        }
+    }
+    #endregion
+
+    #region Not Booked Apartments
+    public async Task NotBookedApartmentsAsync()
+    {
+        var apartments = await apartmentService.NotBookedApartmentsAsync();
+        if (apartments.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[yellow]The hotel does not yet have apartments.[/]\nPress any key to exit...");
+            Console.ReadLine();
+        }
+        else
+        {
+            foreach (var apartment in apartments)
+            {
+                var table = new Table();
+
+                table.AddColumn("[yellow]Apartment[/]");
+
+                table.AddRow($"[green]Apartment ID[/]: {apartment.Id}");
+                table.AddRow($"[green]Type[/]: {apartment.ApartmentType}");
+                table.AddRow($"[green]Price[/]: {apartment.Price}");
+                table.AddRow($"[green]Count of rooms[/]: {apartment.CountOfRooms}");
+
+                AnsiConsole.Write(table);
+            }
+            AnsiConsole.WriteLine("Press any key to exit...");
+            Console.ReadLine();
+        }
+    }
+    #endregion
+
+    #region Hotel's Summary Balance
+    public async Task HotelBalanceAsync()
+    {
+        AnsiConsole.Clear();
+        var balance = await adminService.HotelBalanceInfoAsync();
+        var table = new Table();
+
+        table.AddColumn("[yellow]Hotel[/]");
+
+        table.AddRow($"[green]Summary Balance ($)[/]: {balance}");
+
+        AnsiConsole.Write(table);
+
+        AnsiConsole.MarkupLine("Press enter to exit...");
+        Console.ReadLine();
+        AnsiConsole.Clear();
+        return;
+    }
+    #endregion
+
+    #region Update Admin Password
+    public async Task UpdateAdminPasswordAsync()
     {
         var adminmodel = new Admin();
     reenterpassword:
@@ -135,13 +303,13 @@ public class AdminActions
         try
         {
             adminmodel.Password = password;
-            admin = await adminService.UpdatePassword(adminmodel);
+            admin = await adminService.UpdatePasswordAsync(adminmodel);
             AnsiConsole.MarkupLine("[green]Password Changed[/] Press enter to exit...");
             Console.ReadLine();
             AnsiConsole.Clear();
             return;
         }
-        catch (Exception ex) 
+        catch (Exception ex)
         {
             Console.Clear();
             Console.WriteLine(ex.Message);
@@ -150,6 +318,7 @@ public class AdminActions
             AnsiConsole.Clear();
             return;
         }
-        
+
     }
+    #endregion
 }

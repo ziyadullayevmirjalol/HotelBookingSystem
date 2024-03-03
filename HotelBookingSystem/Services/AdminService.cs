@@ -7,32 +7,33 @@ namespace HotelBookingSystem.Services;
 
 public class AdminService : IAdminService
 {
-    private List<Admin> administration;
-    private ApartmentService apartmentService;
-    private CustomerService customerService;
-
     public AdminService(ApartmentService apartmentService, CustomerService customerService)
     {
         this.apartmentService = apartmentService;
         this.customerService = customerService;
     }
-    public async ValueTask<Apartment> AddNewApartment(ApartmentCreateModel newApartment)
+
+    private List<Admin> administration;
+    private ApartmentService apartmentService;
+    private CustomerService customerService;
+
+    public async ValueTask<Apartment> AddNewApartmentAsync(ApartmentCreateModel newApartment)
     {
-        return await apartmentService.Create(newApartment);
+        return await apartmentService.CreateAsync(newApartment);
     }
-    public async ValueTask<List<Apartment>> GetAllApartments()
+    public async ValueTask<List<Apartment>> GetAllApartmentsAsync()
     {
-        return await apartmentService.GetAll();
+        return await apartmentService.GetAllAsync();
     }
-    public async ValueTask<List<Customer>> GetAllCustomers()
+    public async ValueTask<List<Customer>> GetAllCustomersAsync()
     {
-        return await customerService.GetAll();
+        return await customerService.GetAllAsync();
     }
-    public async ValueTask<Apartment> GetApartmentById(int id)
+    public async ValueTask<Apartment> GetApartmentByIdAsync(int id)
     {
-        return await apartmentService.Get(id);
+        return await apartmentService.GetAsync(id);
     }
-    public async ValueTask<Admin> LoginAsAdmin(string password)
+    public async ValueTask<Admin> LoginAsAdminAsync(string password)
     {
         administration = await FileIO.ReadAsync<Admin>(Constants.ADMINISTRATIONINFO);
 
@@ -40,7 +41,7 @@ public class AdminService : IAdminService
             ?? throw new Exception("Password is not match.");
         return admin;
     }
-    public async ValueTask<Admin> UpdatePassword(Admin newAdmin)
+    public async ValueTask<Admin> UpdatePasswordAsync(Admin newAdmin)
     {
         administration = await FileIO.ReadAsync<Admin>(Constants.ADMINISTRATIONINFO);
 
@@ -50,5 +51,13 @@ public class AdminService : IAdminService
 
         await FileIO.WriteAsync(Constants.ADMINISTRATIONINFO, administration);
         return admin;
+    }
+    public async ValueTask<double> HotelBalanceInfoAsync()
+    {
+        administration = await FileIO.ReadAsync<Admin>(Constants.ADMINISTRATIONINFO);
+
+        var admin = administration.FirstOrDefault()
+            ?? throw new Exception("administration info corrupted.");
+        return admin.HotelBalanceInfo;
     }
 }

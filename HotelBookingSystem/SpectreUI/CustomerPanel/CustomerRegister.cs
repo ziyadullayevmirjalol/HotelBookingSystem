@@ -8,12 +8,16 @@ namespace HotelBookingSystem.SpectreUI.CustomerPanel;
 public class CustomerRegister
 {
     private CustomerService customerService;
+    private ApartmentService apartmentService;
     private CustomerMenu customerMenu;
-    public CustomerRegister(CustomerService customerService)
+    public CustomerRegister(CustomerService customerService, ApartmentService apartmentService)
     {
         this.customerService = customerService;
+        this.apartmentService = apartmentService;
     }
-    public async Task Register()
+
+    #region Registration
+    public async Task RegisterAsync()
     {
         AnsiConsole.Clear();
         while (true)
@@ -47,11 +51,11 @@ public class CustomerRegister
 
             try
             {
-                var createdCustomer = await customerService.Create(customerCreateModel);
-                var getCustomer = await customerService.GetToLogin(username, password);
+                var createdCustomer = await customerService.CreateAsync(customerCreateModel);
+                var getCustomer = await customerService.GetToLoginAsync(username, password);
 
-                customerMenu = new CustomerMenu(getCustomer, customerService);
-                await customerMenu.Menu();
+                customerMenu = new CustomerMenu(getCustomer, customerService, apartmentService);
+                await customerMenu.MenuAsync();
                 return;
             }
             catch (Exception ex)
@@ -66,4 +70,5 @@ public class CustomerRegister
 
         }
     }
+    #endregion
 }

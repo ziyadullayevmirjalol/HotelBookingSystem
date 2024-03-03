@@ -23,11 +23,12 @@ public class MainMenu
         adminService = new AdminService(apartmentService, customerService);
 
         adminLogin = new AdminLogin(adminService, apartmentService);
-        customerLogin = new CustomerLogin(customerService);
-        customerRegister = new CustomerRegister(customerService);
+        customerLogin = new CustomerLogin(customerService, apartmentService);
+        customerRegister = new CustomerRegister(customerService, apartmentService);
     }
+
     #region Run
-    public async Task Run()
+    public async Task RunAsync()
     {
         while (true)
         {
@@ -44,11 +45,11 @@ public class MainMenu
             {
                 case "As Customer":
                     AnsiConsole.Clear();
-                    await CustomerAsk();
+                    await CustomerAskAsync();
                     break;
                 case "As Administrator\n":
                     AnsiConsole.Clear();
-                    await AdminAsk();
+                    await AdminAskAsync();
                     break;
                 case "[red]Exit[/]":
                     return;
@@ -58,7 +59,7 @@ public class MainMenu
     #endregion
 
     #region Customer
-    public async Task CustomerAsk()
+    public async Task CustomerAskAsync()
     {
         while (true)
         {
@@ -73,10 +74,10 @@ public class MainMenu
             switch (c)
             {
                 case "Login":
-                    await customerLogin.Login();
+                    await customerLogin.LoginAync();
                     break;
                 case "Register\n":
-                    await customerRegister.Register();
+                    await customerRegister.RegisterAsync();
                     break;
                 case "[red]Go Back[/]":
                     return;
@@ -86,7 +87,7 @@ public class MainMenu
     #endregion
 
     #region Admin
-    public async Task AdminAsk()
+    public async Task AdminAskAsync()
     {
         while (true)
         {
@@ -100,7 +101,7 @@ public class MainMenu
             switch (c)
             {
                 case "Login\n":
-                    await adminLogin.Login();
+                    await adminLogin.LoginAsync();
                     break;
                 case "[red]Go Back[/]":
                     return;

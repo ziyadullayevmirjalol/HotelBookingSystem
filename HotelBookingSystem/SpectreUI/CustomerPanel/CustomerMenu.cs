@@ -10,24 +10,29 @@ public class CustomerMenu
     private Customer Customer;
     private CustomerActions customerActions;
     private CustomerService customerService;
-    public CustomerMenu(Customer customer, CustomerService customerService)
+    private ApartmentService apartmentService;
+    public CustomerMenu(Customer customer, CustomerService customerService, ApartmentService apartmentService)
     {
         this.Customer = customer;
         this.customerService = customerService;
-        customerActions = new CustomerActions(customer, customerService);
+        this.apartmentService = apartmentService;
+        customerActions = new CustomerActions(customer, customerService, apartmentService);
     }
+
     #region Menu
-    public async Task Menu()
+    public async Task MenuAsync()
     {
         while (true)
         {
             AnsiConsole.Clear();
             var choise = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("Dream[green]House[/][red]/[/]Customer")
-                    .PageSize(4)
-                    .AddChoices(new[] {
+               new SelectionPrompt<string>()
+                   .Title("Dream[green]House[/][red]/[/]Customer")
+                   .PageSize(4)
+                   .AddChoices(new[] {
                         "Deposit",
+                        "View Booked Apartments",
+                        "View not Booked Apartments",
                         "Book new apartment",
                         "Remove already booked apartment",
                         "View Profile",
@@ -39,27 +44,35 @@ public class CustomerMenu
             {
                 case "Deposit":
                     AnsiConsole.Clear();
-                    await customerActions.Deposit();
+                    await customerActions.DepositAsync();
+                    break;
+                case "View Booked Apartments":
+                    AnsiConsole.Clear();
+                    await customerActions.BookedApartmentsAsync();
+                    break;
+                case "View not Booked Apartments":
+                    AnsiConsole.Clear();
+                    await customerActions.NotBookedApartmentsAsync();
                     break;
                 case "Book new apartment":
                     AnsiConsole.Clear();
-                    await customerActions.BookNewApartment();
+                    await customerActions.BookNewApartmentAsync();
                     break;
                 case "Remove already booked apartment":
                     AnsiConsole.Clear();
-                    await customerActions.RemoveBookedApartment();
+                    await customerActions.RemoveBookedApartmentAsync();
                     break;
                 case "View Profile":
                     AnsiConsole.Clear();
-                    await customerActions.ViewProfile();
+                    await customerActions.ViewProfileAsync();
                     break;
                 case "Update customer details":
                     AnsiConsole.Clear();
-                    await customerActions.UpdateCustomerDetails();
+                    await customerActions.UpdateCustomerDetailsAsync();
                     break;
                 case "Delete account\n":
                     AnsiConsole.Clear();
-                    await customerActions.DeleteAccount();
+                    await customerActions.DeleteAccountAsync();
                     return;
                 case "[red]Sign out[/]":
                     return;

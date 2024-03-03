@@ -5,15 +5,19 @@ namespace HotelBookingSystem.SpectreUI.CustomerPanel;
 
 public class CustomerLogin
 {
+
     private CustomerService customerService;
+    private ApartmentService apartmentService;
     private CustomerMenu customerMenu;
 
-    public CustomerLogin(CustomerService customerService)
+    public CustomerLogin(CustomerService customerService, ApartmentService apartmentService)
     {
         this.customerService = customerService;
-
+        this.apartmentService = apartmentService;
     }
-    public async Task Login()
+
+    #region Login
+    public async Task LoginAync()
     {
         AnsiConsole.Clear();
         while (true)
@@ -26,10 +30,10 @@ public class CustomerLogin
 
             try
             {
-                var getCustomer = await customerService.GetToLogin(username, password);
+                var getCustomer = await customerService.GetToLoginAsync(username, password);
 
-                customerMenu = new CustomerMenu(getCustomer, customerService);
-                await customerMenu.Menu();
+                customerMenu = new CustomerMenu(getCustomer, customerService, apartmentService);
+                await customerMenu.MenuAsync();
                 return;
             }
             catch (Exception ex)
@@ -43,4 +47,5 @@ public class CustomerLogin
             }
         }
     }
+    #endregion
 }

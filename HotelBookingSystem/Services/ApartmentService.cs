@@ -10,7 +10,7 @@ public class ApartmentService : IApartmentService
 {
     private List<Apartment> apartments;
 
-    public async ValueTask<Apartment> Create(ApartmentCreateModel apartment)
+    public async ValueTask<Apartment> CreateAsync(ApartmentCreateModel apartment)
     {
         apartments = await FileIO.ReadAsync<Apartment>(Constants.APARTMENTSPATH);
 
@@ -20,7 +20,7 @@ public class ApartmentService : IApartmentService
 
         return createdApartment;
     }
-    public async ValueTask<bool> Delete(int id)
+    public async ValueTask<bool> DeleteAsync(int id)
     {
         apartments = await FileIO.ReadAsync<Apartment>(Constants.APARTMENTSPATH);
 
@@ -33,7 +33,7 @@ public class ApartmentService : IApartmentService
         await FileIO.WriteAsync(Constants.APARTMENTSPATH, apartments);
         return true;
     }
-    public async ValueTask<Apartment> Get(int id)
+    public async ValueTask<Apartment> GetAsync(int id)
     {
         apartments = await FileIO.ReadAsync<Apartment>(Constants.APARTMENTSPATH);
 
@@ -42,11 +42,12 @@ public class ApartmentService : IApartmentService
 
         return existApartment;
     }
-    public async ValueTask<List<Apartment>> GetAll()
+    public async ValueTask<List<Apartment>> GetAllAsync()
     {
-        return await FileIO.ReadAsync<Apartment>(Constants.APARTMENTSPATH);
+        apartments = await FileIO.ReadAsync<Apartment>(Constants.APARTMENTSPATH);
+        return apartments.Where(apartment => !apartment.IsDeleted).ToList();
     }
-    public async ValueTask<bool> SetOrdered(int apartmentId, int customerId)
+    public async ValueTask<bool> SetOrderedAsync(int apartmentId, int customerId)
     {
         apartments = await FileIO.ReadAsync<Apartment>(Constants.APARTMENTSPATH);
 
@@ -57,7 +58,7 @@ public class ApartmentService : IApartmentService
         await FileIO.WriteAsync(Constants.APARTMENTSPATH, apartments);
         return true;
     }
-    public async ValueTask<bool> SetUnordered(int apartmentId, int customerId)
+    public async ValueTask<bool> SetUnorderedAsync(int apartmentId, int customerId)
     {
         apartments = await FileIO.ReadAsync<Apartment>(Constants.APARTMENTSPATH);
 
@@ -68,13 +69,13 @@ public class ApartmentService : IApartmentService
         await FileIO.WriteAsync(Constants.APARTMENTSPATH, apartments);
         return true;
     }
-    public async ValueTask<List<Apartment>> OrderedApartments()
+    public async ValueTask<List<Apartment>> BookedApartmentsAsync()
     {
         apartments = await FileIO.ReadAsync<Apartment>(Constants.APARTMENTSPATH);
 
         return apartments.Where(a => a.OrderedCustomerId > 0).ToList();
     }
-    public async ValueTask<List<Apartment>> NotOrderedApartments()
+    public async ValueTask<List<Apartment>> NotBookedApartmentsAsync()
     {
         apartments = await FileIO.ReadAsync<Apartment>(Constants.APARTMENTSPATH);
 

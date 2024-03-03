@@ -18,6 +18,6 @@ public class Customer : Auditable
     public string Lastname { get; set; }
     [JsonProperty("balance")]
     public double Balance { get; set; }
-    [JsonProperty("apartment_id")]
+    [JsonProperty("room_id")]
     public int ApartmentId { get; set; }
 }

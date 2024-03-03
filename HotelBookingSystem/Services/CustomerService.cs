@@ -14,24 +14,35 @@ public class CustomerService : ICustomerService
         this.apartmentService = apartmentService;
     }
 
-    List<Customer> customers;
-    public async ValueTask<Customer> BookApartment(int apartmentId, int customerId)
+    private List<Customer> customers;
+
+    public async ValueTask<Customer> BookApartmentAsync(int apartmentId, int customerId)
     {
         customers = await FileIO.ReadAsync<Customer>(Constants.CUSTOMERSPATH);
 
         var existCustomer = customers.FirstOrDefault(customers => customers.Id == customerId && !customers.IsDeleted)
             ?? throw new Exception($"Customer is not exists with Id: {customerId}");
 
-        var existAparment = await apartmentService.Get(apartmentId)
+        var existAparment = await apartmentService.GetAsync(apartmentId)
             ?? throw new Exception($"Apartment is not exists with Id: {apartmentId}");
 
-        if (existAparment.OrderedCustomerId == 0)
+        if (existAparment.OrderedCustomerId == 0 && existCustomer.ApartmentId == 0)
         {
             if (existAparment.Price <= existCustomer.Balance)
             {
+                var administration = await FileIO.ReadAsync<Admin>(Constants.ADMINISTRATIONINFO);
+
+                var admin = administration.FirstOrDefault()
+                    ?? throw new Exception("administration info corrupted, transaction canceled.");
+
                 existCustomer.Balance -= existAparment.Price;
+                admin.HotelBalanceInfo += existAparment.Price;
+
+                await FileIO.WriteAsync(Constants.ADMINISTRATIONINFO, administration);
+
                 existCustomer.ApartmentId = apartmentId;
-                await apartmentService.SetOrdered(existAparment.Id, existCustomer.Id);
+
+                await apartmentService.SetOrderedAsync(existAparment.Id, existCustomer.Id);
             }
             else
             {
@@ -44,13 +55,13 @@ public class CustomerService : ICustomerService
         }
         else
         {
-            throw new Exception("Someone Already booked this apartment");
+            throw new Exception("Someone has already booked this apartment or you have already booked another one.");
         }
 
         await FileIO.WriteAsync(Constants.CUSTOMERSPATH, customers);
         return existCustomer;
     }
-    public async ValueTask<CustomerViewModel> Create(CustomerCreateModel customer)
+    public async ValueTask<CustomerViewModel> CreateAsync(CustomerCreateModel customer)
     {
         customers = await FileIO.ReadAsync<Customer>(Constants.CUSTOMERSPATH);
 
@@ -62,7 +73,7 @@ public class CustomerService : ICustomerService
         await FileIO.WriteAsync(Constants.CUSTOMERSPATH, customers);
         return createdCustomer.MapTo<CustomerViewModel>();
     }
-    public async ValueTask<bool> Delete(int customerId)
+    public async ValueTask<bool> DeleteAsync(int customerId)
     {
         customers = await FileIO.ReadAsync<Customer>(Constants.CUSTOMERSPATH);
 
@@ -75,20 +86,20 @@ public class CustomerService : ICustomerService
         await FileIO.WriteAsync(Constants.CUSTOMERSPATH, customers);
         return true;
     }
-    public async ValueTask<Customer> DeleteBookingApartment(int apartmentId, int customerId)
+    public async ValueTask<Customer> DeleteBookingApartmentAsync(int apartmentId, int customerId)
     {
         customers = await FileIO.ReadAsync<Customer>(Constants.CUSTOMERSPATH);
 
         var existCustomer = customers.FirstOrDefault(customers => customers.Id == customerId && !customers.IsDeleted)
             ?? throw new Exception($"Customer is not exists with Id: {customerId}");
 
-        var existAparment = await apartmentService.Get(apartmentId)
+        var existAparment = await apartmentService.GetAsync(apartmentId)
             ?? throw new Exception($"Apartment is not exists with Id: {apartmentId}");
 
         try
         {
             existCustomer.ApartmentId = 0;
-            await apartmentService.SetUnordered(apartmentId, customerId);
+            await apartmentService.SetUnorderedAsync(apartmentId, customerId);
             await FileIO.WriteAsync(Constants.CUSTOMERSPATH, customers);
         }
         catch (Exception ex)
@@ -97,7 +108,7 @@ public class CustomerService : ICustomerService
         }
         return existCustomer;
     }
-    public async ValueTask<Customer> GetCustomer(int customerId)
+    public async ValueTask<Customer> GetCustomerAsync(int customerId)
     {
         customers = await FileIO.ReadAsync<Customer>(Constants.CUSTOMERSPATH);
 
@@ -105,7 +116,7 @@ public class CustomerService : ICustomerService
             ?? throw new Exception($"Customer is not exists with Id: {customerId}");
         return existCustomer;
     }
-    public async ValueTask<Customer> GetToLogin(string username, string password)
+    public async ValueTask<Customer> GetToLoginAsync(string username, string password)
     {
         customers = await FileIO.ReadAsync<Customer>(Constants.CUSTOMERSPATH);
 
@@ -113,7 +124,7 @@ public class CustomerService : ICustomerService
             ?? throw new Exception($"Customer is not exists with username or incorrect password: {username}");
         return existCustomer;
     }
-    public async ValueTask<CustomerViewModel> Update(int customerId, CustomerUpdateModel customer)
+    public async ValueTask<CustomerViewModel> UpdateAsync(int customerId, CustomerUpdateModel customer)
     {
         customers = await FileIO.ReadAsync<Customer>(Constants.CUSTOMERSPATH);
 
@@ -130,11 +141,12 @@ public class CustomerService : ICustomerService
         existCustomer.Email = customer.Email;
         existCustomer.Firstname = customer.Firstname;
         existCustomer.Lastname = customer.Lastname;
+        existCustomer.UpdatedAt = DateTime.UtcNow;
 
         await FileIO.WriteAsync(Constants.CUSTOMERSPATH, customers);
         return existCustomer.MapTo<CustomerViewModel>();
     }
-    public async ValueTask<CustomerViewModel> ViewCustomer(int customerId)
+    public async ValueTask<CustomerViewModel> ViewCustomerAsync(int customerId)
     {
         customers = await FileIO.ReadAsync<Customer>(Constants.CUSTOMERSPATH);
 
@@ -142,11 +154,12 @@ public class CustomerService : ICustomerService
             ?? throw new Exception($"Customer is not exists with Id: {customerId}");
         return existCustomer.MapTo<CustomerViewModel>();
     }
-    public async ValueTask<List<Customer>> GetAll()
+    public async ValueTask<List<Customer>> GetAllAsync()
     {
-        return await FileIO.ReadAsync<Customer>(Constants.CUSTOMERSPATH);
+        customers = await FileIO.ReadAsync<Customer>(Constants.CUSTOMERSPATH);
+        return customers.Where(customer => !customer.IsDeleted).ToList();
     }
-    public async ValueTask<Customer> Deposit(int customerId, double amount)
+    public async ValueTask<Customer> DepositAsync(int customerId, double amount)
     {
         customers = await FileIO.ReadAsync<Customer>(Constants.CUSTOMERSPATH);
         var existCustomer = customers.FirstOrDefault(customer => customer.Id == customerId && !customer.IsDeleted)

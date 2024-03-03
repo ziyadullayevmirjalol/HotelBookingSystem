@@ -14,7 +14,9 @@ public class AdminLogin
         this.adminService = adminService;
         this.apartmentService = apartmentService;
     }
-    public async Task Login()
+
+    #region Login
+    public async Task LoginAsync()
     {
         AnsiConsole.Clear();
         while (true)
@@ -26,10 +28,10 @@ public class AdminLogin
 
             try
             {
-                var getAdmin = await adminService.LoginAsAdmin(password);
+                var getAdmin = await adminService.LoginAsAdminAsync(password);
 
                 adminMenu = new AdminMenu(getAdmin, adminService, apartmentService);
-                await adminMenu.Menu();
+                await adminMenu.MenuAsync();
                 return;
             }
             catch (Exception ex)
@@ -43,4 +45,5 @@ public class AdminLogin
             }
         }
     }
+    #endregion
 }

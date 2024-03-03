@@ -1,11 +1,7 @@
 [
   {
     "username": "hotelmotel",
-    "password": "sadperson23",
-    "id": 0,
-    "created_at": "2024-03-02T14:34:17.0049766Z",
-    "updated_at": "0001-01-01T00:00:00",
-    "deleted_at": "0001-01-01T00:00:00",
-    "is_deleted": false
+    "password": "hotelmotel23",
+    "hotel_balance_info": 150000.0
   }
 ]

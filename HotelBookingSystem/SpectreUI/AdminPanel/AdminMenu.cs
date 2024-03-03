@@ -18,7 +18,9 @@ public class AdminMenu
         this.apartmentService = apartmentService;
         adminActions = new AdminActions(admin, adminService, apartmentService);
     }
-    public async Task Menu()
+
+    #region Menu
+    public async Task MenuAsync()
     {
         while (true)
         {
@@ -29,8 +31,12 @@ public class AdminMenu
                     .PageSize(4)
                     .AddChoices(new[] {
                         "Add new apartment to the Hotel",
-                        "View Ordered Apartments",
-                        "View Unrdered Apartments",
+                        "Delete apartment from the Hotel",
+                        "Get Apartment By ID",
+                        "Get All Apartments",
+                        "Get All Customers",
+                        "View Booked Apartments",
+                        "View not Booked Apartments",
                         "View summary balance of Hotel",
                         "Update admin password\n",
                         "[red]Sign out[/]"}));
@@ -39,27 +45,44 @@ public class AdminMenu
             {
                 case "Add new apartment to the Hotel":
                     AnsiConsole.Clear();
-                    await adminActions.AddNewApartment();
+                    await adminActions.AddNewApartmentAsync();
                     break;
-                case "View Ordered Apartments":
+                case "Delete apartment from the Hotel":
                     AnsiConsole.Clear();
-                    await adminActions.OrderedApartments();
+                    await adminActions.DeleteApartmentAsync();
                     break;
-                case "View Unrdered Apartments":
+                case "Get Apartment By ID":
                     AnsiConsole.Clear();
-                    await adminActions.UnrderedApartments();
+                    await adminActions.GetApartmentByIdAsync();
+                    break;
+                case "Get All Apartments":
+                    AnsiConsole.Clear();
+                    await adminActions.GetAllApartmentsAsync();
+                    break;
+                case "Get All Customers":
+                    AnsiConsole.Clear();
+                    await adminActions.GetAllCustomersAsync();
+                    break;
+                case "View Booked Apartments":
+                    AnsiConsole.Clear();
+                    await adminActions.BookedApartmentsAsync();
+                    break;
+                case "View not Booked Apartments":
+                    AnsiConsole.Clear();
+                    await adminActions.NotBookedApartmentsAsync();
                     break;
                 case "View summary balance of Hotel":
                     AnsiConsole.Clear();
-                    await adminActions.HotelBalance();
+                    await adminActions.HotelBalanceAsync();
                     break;
                 case "Update admin password\n":
                     AnsiConsole.Clear();
-                    await adminActions.UpdateAdminPassword();
+                    await adminActions.UpdateAdminPasswordAsync();
                     return;
                 case "[red]Sign out[/]":
                     return;
             }
         }
     }
+    #endregion
 }
