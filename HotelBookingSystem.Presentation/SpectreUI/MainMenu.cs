@@ -27,49 +27,51 @@ public class MainMenu
         customerRegister = new CustomerRegister(customerService, apartmentService);
     }
 
+    #region Run
     public async Task RunAsync()
     {
         while (true)
         {
-            var choice = AnsiConsole.Prompt(
+            var choise = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
                     .Title("Dream[green]House[/]")
                     .PageSize(4)
                     .AddChoices(new[] {
-                    "As Customer",
-                    "As Administrator\n",
-                    "[red]Exit[/]"}));
+                        "As Customer",
+                        "As Administrator\n",
+                        "[red]Exit[/]"}));
 
-            switch (choice)
+            switch (choise)
             {
                 case "As Customer":
                     AnsiConsole.Clear();
-                    await CustomerMenuAsync();
+                    await CustomerAskAsync();
                     break;
                 case "As Administrator\n":
                     AnsiConsole.Clear();
-                    await AdminMenuAsync();
+                    await AdminAskAsync();
                     break;
                 case "[red]Exit[/]":
                     return;
             }
         }
     }
+    #endregion
 
-    public async Task CustomerMenuAsync()
+    #region Customer
+    public async Task CustomerAskAsync()
     {
         while (true)
         {
-            var choice = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("As Customer")
-                    .PageSize(4)
-                    .AddChoices(new[] {
-                    "Login",
-                    "Register\n",
-                    "[red]Go Back[/]"}));
-
-            switch (choice)
+            var c = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("As Customer")
+                .PageSize(4)
+                .AddChoices(new[] {
+                            "Login",
+                            "Register\n",
+                            "[red]Go Back[/]"}));
+            switch (c)
             {
                 case "Login":
                     await customerLogin.LoginAsync();
@@ -82,20 +84,21 @@ public class MainMenu
             }
         }
     }
+    #endregion
 
-    public async Task AdminMenuAsync()
+    #region Admin
+    public async Task AdminAskAsync()
     {
         while (true)
         {
-            var choice = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("As Administrator")
-                    .PageSize(4)
-                    .AddChoices(new[] {
-                    "Login\n",
-                    "[red]Go Back[/]"}));
-
-            switch (choice)
+            var c = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("As Administrator")
+                .PageSize(4)
+                .AddChoices(new[] {
+                            "Login\n",
+                            "[red]Go Back[/]"}));
+            switch (c)
             {
                 case "Login\n":
                     await adminLogin.LoginAsync();
@@ -105,88 +108,5 @@ public class MainMenu
             }
         }
     }
-
-
-    //#region Run
-    //public async Task RunAsync()
-    //{
-    //    while (true)
-    //    {
-    //        var choise = AnsiConsole.Prompt(
-    //            new SelectionPrompt<string>()
-    //                .Title("Dream[green]House[/]")
-    //                .PageSize(4)
-    //                .AddChoices(new[] {
-    //                    "As Customer",
-    //                    "As Administrator\n",
-    //                    "[red]Exit[/]"}));
-
-    //        switch (choise)
-    //        {
-    //            case "As Customer":
-    //                AnsiConsole.Clear();
-    //                await CustomerAskAsync();
-    //                break;
-    //            case "As Administrator\n":
-    //                AnsiConsole.Clear();
-    //                await AdminAskAsync();
-    //                break;
-    //            case "[red]Exit[/]":
-    //                return;
-    //        }
-    //    }
-    //}
-    //#endregion
-
-    //#region Customer
-    //public async Task CustomerAskAsync()
-    //{
-    //    while (true)
-    //    {
-    //        var c = AnsiConsole.Prompt(
-    //        new SelectionPrompt<string>()
-    //            .Title("As Customer")
-    //            .PageSize(4)
-    //            .AddChoices(new[] {
-    //                        "Login",
-    //                        "Register\n",
-    //                        "[red]Go Back[/]"}));
-    //        switch (c)
-    //        {
-    //            case "Login":
-    //                await customerLogin.LoginAync();
-    //                break;
-    //            case "Register\n":
-    //                await customerRegister.RegisterAsync();
-    //                break;
-    //            case "[red]Go Back[/]":
-    //                return;
-    //        }
-    //    }
-    //}
-    //#endregion
-
-    //#region Admin
-    //public async Task AdminAskAsync()
-    //{
-    //    while (true)
-    //    {
-    //        var c = AnsiConsole.Prompt(
-    //        new SelectionPrompt<string>()
-    //            .Title("As Administrator")
-    //            .PageSize(4)
-    //            .AddChoices(new[] {
-    //                        "Login\n",
-    //                        "[red]Go Back[/]"}));
-    //        switch (c)
-    //        {
-    //            case "Login\n":
-    //                await adminLogin.LoginAsync();
-    //                break;
-    //            case "[red]Go Back[/]":
-    //                return;
-    //        }
-    //    }
-    //}
-    //#endregion
+    #endregion
 }
