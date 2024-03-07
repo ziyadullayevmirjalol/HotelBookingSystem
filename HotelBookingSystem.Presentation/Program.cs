@@ -1,4 +1,2 @@
 ﻿using HotelBookingSystem.Presentation.SpectreUI;
-
-MainMenu mainMenu = new MainMenu();
-mainMenu.RunAsync().Wait();
+var mainMenu = new MainMenu().RunAsync();
