@@ -1,0 +1,30 @@
+[
+  {
+    "username": "hotelmotel",
+    "password": "f023f4d618fc27434bcfd740bc91204b891bc2d2aa538d85f948c5bfde986d1c",
+    "email": "aa@aa.aa",
+    "firstname": "hotel",
+    "lastname": "motel",
+    "balance": 50000.0,
+    "room_id": 1,
+    "id": 1,
+    "created_at": "2024-03-03T14:54:53.3053757Z",
+    "updated_at": "2024-03-07T19:00:21.5976019Z",
+    "deleted_at": "0001-01-01T00:00:00",
+    "is_deleted": false
+  },
+  {
+    "username": "yasub",
+    "password": "0264aa715a9c29538ee3930b366295f6598becfbc91ac4de1af5910ccb511919",
+    "email": "yasub@gmail.com",
+    "firstname": "Ali",
+    "lastname": "Yasuf",
+    "balance": 1000000.0,
+    "room_id": 0,
+    "id": 2,
+    "created_at": "2024-03-04T16:07:57.362052Z",
+    "updated_at": "0001-01-01T00:00:00",
+    "deleted_at": "0001-01-01T00:00:00",
+    "is_deleted": false
+  }
+]
