@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBookingSystem.DTOs", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBookingSystem.Services", "HotelBookingSystem.Service\HotelBookingSystem.Services.csproj", "{0CF67479-CBF8-4004-9DE5-5E011A4997FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelBookingSystem.Presentation", "HotelBookingSystem.Presentation\HotelBookingSystem.Presentation.csproj", "{0C631573-77D4-4938-A9B7-CB25EF5A4FF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBookingSystem.Presentation", "HotelBookingSystem.Presentation\HotelBookingSystem.Presentation.csproj", "{0C631573-77D4-4938-A9B7-CB25EF5A4FF5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E488FAA7-A7B4-447A-AE34-B3A67D91FB49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +44,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F31C497E-99CC-4351-AF13-D3A193C9BFB1} = {E488FAA7-A7B4-447A-AE34-B3A67D91FB49}
+		{CDE2ADFA-4F70-4639-BADD-2890AA0D811D} = {E488FAA7-A7B4-447A-AE34-B3A67D91FB49}
+		{797F013A-28CF-45B9-893C-BEF685A893E4} = {E488FAA7-A7B4-447A-AE34-B3A67D91FB49}
+		{0CF67479-CBF8-4004-9DE5-5E011A4997FD} = {E488FAA7-A7B4-447A-AE34-B3A67D91FB49}
+		{0C631573-77D4-4938-A9B7-CB25EF5A4FF5} = {E488FAA7-A7B4-447A-AE34-B3A67D91FB49}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3EB070F3-FF76-4A97-8DCE-001672916C12}
